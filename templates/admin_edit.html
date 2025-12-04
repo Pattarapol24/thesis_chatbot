@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>แก้ไขข้อมูล Thesis - SU Chatbot</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap');
+
+/* --- Body --- */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #a6c1ee, #fbc2eb);
+    font-family: 'Prompt', sans-serif;
+}
+
+/* --- Container --- */
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    width: 900px;
+    max-width: 95%;
+    border-radius: 25px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+    padding: 40px 30px;
+    margin: 40px 0;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+/* --- Heading --- */
+h1 {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    background: linear-gradient(135deg, #505cd7, #3840a8);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* --- Form --- */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: 600;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    color: #3840a8;
+}
+
+input[type="text"] {
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+input[type="text"]:focus {
+    border: 1.3px solid #505cd7;
+    background: #f0f4ff;
+    outline: none;
+}
+
+input[readonly] {
+    background: #e8f0ff;
+    cursor: pointer;
+}
+
+button[type="submit"] {
+    margin-top: 25px;
+    padding: 12px 0;
+    font-size: 1.1em;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    background: linear-gradient(90deg,#505cd7 10%,#3840a8 90%);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+button[type="submit"]:hover {
+    background: linear-gradient(90deg,#3840a8 20%,#505cd7 100%);
+    transform: scale(1.03);
+}
+
+/* --- Modal --- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.24);
+}
+
+.modal-content {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 18px;
+    padding: 28px 22px 15px 22px;
+    max-width: 400px;
+    margin: 60px auto;
+    position: relative;
+    text-align: left;
+    box-shadow: 0 8px 34px rgba(0,0,0,0.12);
+}
+
+.modal h3 {
+    color: #3840a8;
+    margin-bottom: 15px;
+}
+
+.close-modal {
+    color: #aaa;
+    position: absolute;
+    right: 15px;
+    top: 13px;
+    font-size: 1.7em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color .12s;
+}
+
+.close-modal:hover { color: #505cd7; }
+
+table.advisor-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+}
+
+table.advisor-table td {
+    padding: 6px;
+}
+
+table.advisor-table tr:hover {
+    background: #f0f4ff;
+}
+
+.modal-btns {
+    margin-top: 13px;
+    text-align: right;
+}
+
+.modal-btns button {
+    min-width: 57px;
+    margin-left: 6px;
+    padding: 7px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    color: #fff;
+    background: #505cd7;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background .14s;
+}
+
+.modal-btns button.cancel-btn {
+    background: #bfc3d6;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>แก้ไขข้อมูล Thesis</h1>
+    <form id="edit-form" autocomplete="off">
+        <label>ชื่อปริญญานิพนธ์:</label>
+        <input type="text" id="title" name="title" required value="{{ thesis.title }}">
+
+        <label>ชื่อผู้จัดทำ:</label>
+        <input type="text" id="author" name="author" required value="{{ thesis.author }}">
+
+        <label>ชื่ออาจารย์ที่ปรึกษา:</label>
+        <input type="text" id="advisor" name="advisor" class="advisor-input" required readonly onclick="openAdvisorModal(this)" value="{{ thesis.advisor }}">
+
+        <label>ปีพ.ศ.:</label>
+        <input type="text" id="year" name="year" value="{{ thesis.year }}">
+
+        <label>ชื่อไฟล์:</label>
+        <input type="text" id="filename" name="filename" value="{{ thesis.filename }}">
+
+        <button type="submit" id="submit-btn">บันทึกข้อมูล</button>
+    </form>
+</div>
+
+<!-- Advisor Modal -->
+<div id="advisor-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeAdvisorModal()">&times;</span>
+        <h3>เลือกชื่ออาจารย์ที่ปรึกษา (เลือกได้สูงสุด 2 คน)</h3>
+        <table class="advisor-table">
+            <tbody id="advisor-table-body"></tbody>
+        </table>
+        <div class="modal-btns">
+            <button type="button" class="cancel-btn" onclick="closeAdvisorModal()">ยกเลิก</button>
+            <button type="button" onclick="confirmAdvisorSelection()">ตกลง</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Advisor list
+const advisors = [
+"รศ.ดร.ปานใจ ธารทัศนวงศ์","ผศ.ดร.กรัญญา สิทธิสงวน","ผศ.ดร.กฤษณะ สีพนมวัน","ผศ.ดร.คทา ประดิษฐวงศ์",
+"ผศ.ดร.ณัฐโชติ พรหมฤทธิ์","ผศ.ดร.ทัศนวรรณ ศูนย์กลาง","ผศ.ดร.ปัญญนัท อ้นพงษ์","ผศ.ดร.ภูริวัจน์ วรวิชัยพัฒน์",
+"ผศ.ดร.รัชดาพร คณาวงษ์","ผศ.ดร.สิรักข์ แก้วจำนงค์","ผศ.ดร.สุนีย์ พงษ์พินิจภิญโญ","ผศ.ดร.อรวรรณ เชาวลิต",
+"ผศ.ดร.วีณาวดี ม่วงอ้น","ผศ.โอภาส วงศ์ทวีทรัพย์","อ.ดร.ณัฐพงศ์ จิวมั่งมี","อ.ดร.สัจจาภรณ์ ไวจรรยา",
+"อ.ดร.วัสรา รอดเหตุภัย","อ.ดร.เสาวลักษณ์ อร่ามพงศานุวัต","อ.​เสฐลัทธ์ รอดเหตุภัย","อ.อภิเษก หงษ์วิทยากร"
+];
+
+let currentAdvisorInput = null;
+
+// Modal functions
+function openAdvisorModal(inputElem) {
+    currentAdvisorInput = inputElem;
+    let currentChecked = inputElem.value ? inputElem.value.split(',').map(s=>s.trim()).filter(Boolean) : [];
+    let tbody = document.getElementById('advisor-table-body');
+    tbody.innerHTML = "";
+    advisors.forEach(name => {
+        let checked = currentChecked.includes(name) ? 'checked' : '';
+        tbody.innerHTML += `<tr>
+           <td style="width:1.2em"><input type="checkbox" value="${name}" onchange="onCheckAdvisor(this)" ${checked}></td>
+           <td>${name}</td>
+        </tr>`;
+    });
+    document.getElementById('advisor-modal').style.display = "block";
+}
+
+function closeAdvisorModal() {
+    document.getElementById('advisor-modal').style.display = "none";
+    currentAdvisorInput = null;
+}
+
+function onCheckAdvisor(checkbox) {
+    let tbody = document.getElementById('advisor-table-body');
+    let checkedBoxes = tbody.querySelectorAll('input[type="checkbox"]:checked');
+    if (checkedBoxes.length > 2) {
+        checkbox.checked = false;
+        alert('เลือกชื่ออาจารย์ได้สูงสุด 2 คน');
+    }
+}
+
+function confirmAdvisorSelection() {
+    let tbody = document.getElementById('advisor-table-body');
+    let checked = tbody.querySelectorAll('input[type="checkbox"]:checked');
+    if (checked.length === 0) {
+        alert("กรุณาเลือกอาจารย์อย่างน้อย 1 คน");
+        return;
+    }
+    let names = Array.from(checked).map(cb => cb.value);
+    currentAdvisorInput.value = names.join(', ');
+    closeAdvisorModal();
+}
+
+// Submit form ผ่าน AJAX
+document.getElementById('edit-form').onsubmit = async function(e) {
+    e.preventDefault();
+    const submitBtn = document.getElementById('submit-btn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = "กำลังบันทึก...";
+
+    const data = {
+        title: document.getElementById('title').value.trim(),
+        author: document.getElementById('author').value.trim(),
+        advisor: document.getElementById('advisor').value.trim(),
+        year: document.getElementById('year').value.trim(),
+        filename: document.getElementById('filename').value.trim()
+    };
+
+    try {
+        let res = await fetch(`{{ url_for('admin_edit', thesis_id=thesis.id) }}`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(data)
+        });
+        let result = await res.json();
+        if (result.status === "success") {
+            alert("อัปเดตข้อมูลเรียบร้อยแล้ว");
+            window.location.href = "{{ url_for('show_table') }}";
+        } else {
+            alert("เกิดข้อผิดพลาด: " + result.message);
+        }
+    } catch (err) {
+        alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "บันทึกข้อมูล";
+    }
+};
+</script>
+</body>
+</html>

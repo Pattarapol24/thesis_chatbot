@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - SU Chatbot</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap');
+
+        /* --- Body --- */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #a6c1ee, #fbc2eb);
+            font-family: 'Prompt', sans-serif;
+        }
+
+        /* --- Container --- */
+        .login-container {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            max-width: 480px;
+            width: 90%;
+            padding: 50px 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+        }
+
+        /* --- Logo --- */
+        .logo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin-bottom: 25px;
+            object-fit: cover;
+            border: 4px solid #3840a8;
+            box-shadow: 0 5px 20px rgba(56,64,168,0.4);
+        }
+
+        /* --- Headings --- */
+        h1 {
+            color: #3840a8;
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        p {
+            font-size: 1em;
+            color: #475569;
+            margin-bottom: 30px;
+        }
+
+        /* --- Login Button --- */
+        .login-button {
+            display: inline-block;
+            width: 100%;
+            max-width: 300px;
+            padding: 15px 0;
+            font-size: 1.1em;
+            font-weight: 600;
+            background: linear-gradient(90deg, #505cd7, #3840a8);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(66, 133, 244, 0.4);
+        }
+
+        .login-button:hover {
+            background: linear-gradient(90deg, #3840a8, #505cd7);
+            box-shadow: 0 8px 25px rgba(66, 133, 244, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* --- Footer --- */
+        .footer {
+            margin-top: 25px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .footer span {
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width:600px) {
+            h1 { font-size: 1.8em; }
+            .logo { width: 120px; height: 120px; }
+            .login-container { padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- โลโก้ -->
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="SU Chatbot Logo" class="logo">
+
+        <h1>Thesis Chatbot</h1>
+        <p>เข้าสู่ระบบด้วยอีเมลมหาวิทยาลัยศิลปากรเพื่อเริ่มใช้งาน</p>
+        <a class="login-button" href="{{ url_for('login') }}">Login with SU account</a>
+        <div class="footer">
+            <span>Silpakorn University</span> | Thesis Chatbot
+        </div>
+    </div>
+</body>
+</html>

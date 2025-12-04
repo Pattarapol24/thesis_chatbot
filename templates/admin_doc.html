@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thesis Table - SU Chatbot</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap');
+
+/* --- Body --- */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #a6c1ee, #fbc2eb);
+    font-family: 'Prompt', sans-serif;
+}
+
+/* --- Container --- */
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    width: 900px;
+    max-width: 95%;
+    border-radius: 25px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+    padding: 40px 30px;
+    margin: 40px 0;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+/* --- Heading --- */
+h1 {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    background: linear-gradient(135deg, #505cd7, #3840a8);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* --- Table --- */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 1em;
+    background: rgba(255,255,255,0.85);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    table-layout: fixed;
+    word-break: break-word;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    background: linear-gradient(135deg, #505cd7, #3840a8);
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+tr:nth-child(even) { background: rgba(240,240,255,0.8); }
+tr:hover { background: rgba(230,230,255,0.9); }
+
+/* --- Buttons --- */
+.edit-btn {
+    background: linear-gradient(90deg,#505cd7 10%,#3840a8 90%);
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+.edit-btn:hover {
+    background: linear-gradient(90deg,#3840a8 20%,#505cd7 100%);
+    transform: scale(1.05);
+}
+
+/* --- Responsive --- */
+@media (max-width: 950px) {
+    .container { width: 95%; padding: 30px 20px; }
+    table th, table td { font-size: 0.9em; padding: 8px 10px; }
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>ข้อมูลในตาราง Thesis</h1>
+    <table>
+        <thead>
+            <tr>
+                {% for col in cols %}
+                    {% if col != 'text' %}
+                        <th>{{ col }}</th>
+                    {% endif %}
+                {% endfor %}
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    {% for idx in range(cols|length) %}
+                        {% if cols[idx] != 'text' %}
+                            <td>{{ row[idx] }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td>
+                        <button class="edit-btn" onclick="window.location.href='/admin/edit/{{ row[0] }}'">Edit</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

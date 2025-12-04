@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>คู่มือการใช้งาน Chatbot - SU Chatbot</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #a6c1ee, #fbc2eb);
+        font-family: 'Prompt', sans-serif;
+    }
+
+    .container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        width: 700px;          /* เพิ่มความกว้าง */
+        max-width: 95%;
+        height: auto;          /* ให้ปรับตามเนื้อหา */
+        border-radius: 25px;
+        box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+        padding: 40px 30px;    /* เพิ่ม padding เพื่อความสบายตา */
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s ease;
+    }
+
+    .container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+
+    h1 {
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 30px;
+        font-size: 2.2em;
+        background: linear-gradient(135deg, #505cd7, #3840a8);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        color: #3840a8;
+        font-weight: 600;
+        margin-top: 25px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        color: #333;
+        line-height: 1.7;
+    }
+
+    ul {
+        padding-left: 0;
+        list-style: none;
+    }
+
+    ul li {
+        background: rgba(255, 255, 255, 0.8);
+        margin-bottom: 10px;
+        padding: 14px 18px; 
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    ul li:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+
+    .highlight {
+        font-weight: 600;
+        color: #505cd7;
+    }
+
+    a.btn {
+        display: inline-block;
+        text-decoration: none;
+        text-align: center;
+        margin-top: 20px;
+        padding: 12px 28px;
+        border-radius: 15px;
+        font-weight: 600;
+        transition: all 0.25s ease;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg,#505cd7 10%,#3840a8 90%);
+        color: #fff;
+        box-shadow: 0 5px 15px rgba(80,90,220,0.3);
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(90deg,#3840a8 20%,#505cd7 100%);
+        transform: scale(1.05);
+    }
+
+    .btn-secondary {
+        background: #ccc;
+        color: #333;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .btn-secondary:hover {
+        background: #bbb;
+        transform: scale(1.05);
+    }
+
+    @media (max-width:700px) {
+        .container { width: 95vw; padding: 25px; }
+    }
+</style>
+
+</head>
+<body>
+<div class="container">
+    <h1>คู่มือการใช้งาน Chatbot</h1>
+
+    <p>สวัสดี {{ name }}! นี่คือคู่มือสำหรับการใช้งาน Chatbot ของเรา คุณสามารถถามและค้นหาข้อมูลเกี่ยวกับ <span class="highlight">ปริญญานิพนธ์</span> และ <span class="highlight">อาจารย์</span> ได้อย่างสะดวกและเข้าใจง่าย</p>
+
+    <h2>1. เริ่มถาม Chatbot</h2>
+    <p>พิมพ์คำถามของคุณโดยมีประเภทคำถามดังนี้:</p>
+    <ul>
+        <li><span class="highlight">ถามถึงรายชื่อปริญญานิพนธ์</span> เช่น โปรเจคที่เกี่ยวกับ[หัวข้อที่สนใจ] หรือ โปรเจคปี [เลขปี] มีอะไรบ้าง</li>
+        <li><span class="highlight">ดาวน์โหลดเอกสาร</span> เช่น ขอไฟล์โปรเจค[ชื่อโปรเจค]</li>
+        <li><span class="highlight">ถามเกี่ยวกับข้อมูล metadata</span> เช่น ใครเป็นที่ปรึกษาโปรเจคเรื่อง[ชื่อโปรเจค]</li>
+        <li><span class="highlight">คำถามเชิงลึกจากเอกสาร</span> เช่น สรุปบทที่ 3 ของ[ชื่อโปรเจค]</li>
+        <li><span class="highlight">ข้อมูลเกี่ยวกับอาจารย์</span> เช่น อาจารย์คนไหนถนัด[สายที่อาจารย์ถนัด] หรือ อาจารย์ [ชื่ออาจารย์] ถนัดด้านไหนบ้าง</li>
+        <li><span class="highlight">ขอคำแนะนำโปรเจค</span> เช่น แนะนำโปรเจคที่เกี่ยวกับ [หัวข้อที่สนใจ] หน่อยสิ</li>
+        <li><span class="highlight">ถามว่าอาจารย์คนไหนเป็นที่ปรึกษาโปรเจคอะไรบ้าง</span> เช่น อาจารย์ [ชื่ออาจารย์] เป็นที่ปรึกษาโปรเจคอะไรบ้าง</li>
+        <li><span class="highlight">ถามทั่วไปหรือพูดคุย</span> เช่น ทักทายหรือสอบถามเรื่องทั่วไป</li>
+    </ul>
+
+    <h2>2. ออกจากระบบ</h2>
+    <p>คลิก <strong>Logout</strong> เพื่อออกจากระบบและป้องกันการเข้าถึงข้อมูลส่วนตัว</p>
+
+    <a href="{{ url_for('chat') }}" class="btn btn-primary">ไปที่ Chat</a>
+    <a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
+</div>
+</body>
+</html>

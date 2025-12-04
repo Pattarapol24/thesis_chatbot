@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Upload Thesis PDFs</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap');
+
+/* --- Body --- */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #a6c1ee, #fbc2eb);
+    font-family: 'Prompt', sans-serif;
+}
+
+/* --- Container --- */
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    width: 900px;
+    max-width: 95%;
+    border-radius: 25px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+    padding: 40px 30px;
+    margin: 40px 0;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+/* --- Heading --- */
+h2 {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 30px;
+    font-size: 2em;
+    background: linear-gradient(135deg, #505cd7, #3840a8);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* --- Input fields --- */
+input[type="file"], input[type="text"], input[placeholder] {
+    border-radius: 7px;
+    border: 1.2px solid #a2afd7;
+    background: #f7fafd;
+    padding: 10px 12px;
+    font-size: 1em;
+    margin-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border .14s, background .14s;
+}
+
+input[type="file"] {
+    display: block;
+    margin-top: 10px;
+    padding: 10px;
+    background: #f7fafd;
+}
+
+input[type="file"]:focus, input[type="text"]:focus, input[placeholder]:focus {
+    border: 1.3px solid #4040b2;
+    outline: none;
+    background: #ecefff;
+}
+
+/* --- Advisor input readonly --- */
+.advisor-input[readonly] {
+    background: #e8f0ff;
+    cursor: pointer;
+    color: #345678;
+}
+.advisor-input[readonly]:hover {
+    background: #e2eaff;
+    border: 1.4px solid #505cd7;
+}
+
+/* --- Metadata box --- */
+#meta-container {
+    margin-top: 25px;
+}
+#meta-container > div {
+    border-radius: 12px;
+    border: 1.25px solid #bcc7de;
+    background: linear-gradient(96deg, #fafdff 87%, #e9eefe 100%);
+    margin-bottom: 18px;
+    padding: 20px 18px 20px 18px;
+    box-shadow: 0 2px 8px rgba(44,80,120,.04);
+    transition: box-shadow .2s, background .2s;
+}
+#meta-container > div:hover {
+    box-shadow: 0 6px 27px -7px #b8bee2;
+    background: #f6fafd;
+}
+#meta-container label {
+    font-size: 0.97em;
+    margin: 7px 0 2px 0;
+}
+
+/* --- Submit Button --- */
+button[type="submit"] {
+    margin-top: 19px;
+    width: 100%;
+    background: linear-gradient(90deg,#505cd7 10%,#3840a8 90%);
+    color: #fff;
+    font-size: 1.1em;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: .5px;
+    transition: all 0.25s ease;
+}
+button[type="submit"]:hover {
+    background: linear-gradient(90deg,#3840a8 20%,#505cd7 100%);
+    transform: scale(1.03);
+}
+
+/* --- Modal --- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0; top: 0;
+    width: 100vw; height: 100vh;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.24);
+}
+.modal-content {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    padding: 30px 25px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+    max-width: 400px;
+    margin: 80px auto;
+    position: relative;
+    text-align: left;
+}
+.close-modal {
+    color: #aaa;
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 1.8em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color .12s;
+}
+.close-modal:hover { color: #3840a8; }
+table.advisor-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.97em;
+}
+table.advisor-table th, table.advisor-table td {
+    padding: 8px;
+    border-bottom: 1px solid #f0f0fa;
+}
+table.advisor-table tr:hover {
+    background: rgba(230,230,255,0.9);
+}
+.modal-btns {
+    margin-top: 15px;
+    text-align: right;
+}
+.modal-btns button {
+    min-width: 60px;
+    margin-left: 6px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    color: #fff;
+    background: #505cd7;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+.modal-btns button.cancel-btn {
+    background: #bfc3d6;
+}
+.modal-btns button:disabled {
+    background: #e6e7ef;
+    color: #999;
+    cursor: not-allowed;
+}
+
+@media (max-width:600px) {
+    .container { width: 95%; padding: 8vw 5vw; }
+    .modal-content { max-width: 90vw; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>อัปโหลดปริญญานิพนธ์ PDF <span style="font-weight:300;font-size:0.66em;">(สูงสุด 10 ไฟล์)</span></h2>
+    <form method="post" enctype="multipart/form-data" id="upload-form" autocomplete="off">
+        <label>เลือก PDF (สูงสุด 10 ไฟล์):</label>
+        <input type="file" name="pdf_files" id="pdf_files" multiple accept="application/pdf" onchange="createMetaFields()" required>
+        <div id="meta-container"></div>
+        <input type="hidden" name="meta_datas" id="meta_datas">
+        <button type="submit">อัปโหลดไฟล์และข้อมูล</button>
+    </form>
+</div>
+
+<!-- Modal -->
+<div id="advisor-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeAdvisorModal()">&times;</span>
+        <h3>เลือกชื่ออาจารย์ที่ปรึกษา (เลือกได้สูงสุด 2 คน)</h3>
+        <table class="advisor-table">
+            <tbody id="advisor-table-body"></tbody>
+        </table>
+        <div class="modal-btns">
+            <button type="button" class="cancel-btn" onclick="closeAdvisorModal()">ยกเลิก</button>
+            <button type="button" onclick="confirmAdvisorSelection()">ตกลง</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const advisors = [
+"รศ.ดร.ปานใจ ธารทัศนวงศ์","ผศ.ดร.กรัญญา สิทธิสงวน","ผศ.ดร.กฤษณะ สีพนมวัน",
+"ผศ.ดร.คทา ประดิษฐวงศ์","ผศ.ดร.ณัฐโชติ พรหมฤทธิ์","ผศ.ดร.ทัศนวรรณ ศูนย์กลาง",
+"ผศ.ดร.ปัญญนัท อ้นพงษ์","ผศ.ดร.ภูริวัจน์ วรวิชัยพัฒน์","ผศ.ดร.รัชดาพร คณาวงษ์",
+"ผศ.ดร.สิรักข์ แก้วจำนงค์","ผศ.ดร.สุนีย์ พงษ์พินิจภิญโญ","ผศ.ดร.อรวรรณ เชาวลิต",
+"ผศ.ดร.วีณาวดี ม่วงอ้น","ผศ.โอภาส วงษ์ทวีทรัพย์","อ.ดร.ณัฐพงศ์ จิวมั่งมี",
+"อ.ดร.สัจจาภรณ์ ไวจรรยา","อ.ดร.วัสรา รอดเหตุภัย","อ.ดร.เสาวลักษณ์ อร่ามพงศานุวัต",
+"อ.​เสฐลัทธ์ รอดเหตุภัย","อ.อภิเษก หงษ์วิทยากร"
+];
+
+let currentAdvisorInput = null;
+let currentChecked = [];
+//ฟังก์ชันสร้างฟิลด์ metadata
+function createMetaFields() {
+    let files = document.getElementById("pdf_files").files;
+    let container = document.getElementById('meta-container');
+    container.innerHTML = "";
+    let max_files = 10;
+    if (files.length > max_files) {
+        alert("อัปโหลดไฟล์ได้สูงสุด 10 ไฟล์");
+        document.getElementById("pdf_files").value = "";
+        return;
+    }
+        // ตรวจสอบทุกไฟล์ว่าเป็น PDF หรือไม่
+    for (let i = 0; i < files.length; i++) {
+        if (!files[i].name.toLowerCase().endsWith(".pdf")) {
+            alert(`ไฟล์ "${files[i].name}" ไม่ใช่ไฟล์ PDF`);
+            document.getElementById("pdf_files").value = "";
+            container.innerHTML = "";
+            return;
+        }
+    }
+    for (let i = 0; i < files.length; i++) {
+        let div = document.createElement('div');
+        div.innerHTML = `<b style="color:#3840a8;">ไฟล์ ${i+1}:</b> <span style="color: #576bb3; font-weight:400;">${files[i].name}</span><br>
+            <label>ชื่อปริญญานิพนธ์:</label> <input placeholder="ชื่อปริญญานิพนธ์" name="title" type="text" required> <br>
+            <label>ชื่อผู้จัดทำ:</label> <input placeholder="ชื่อผู้จัดทำ" name="author" type="text" required> <br>
+            <label>ชื่ออาจารย์ที่ปรึกษา:</label> 
+                <input placeholder="เลือกชื่ออาจารย์ที่ปรึกษาสูงสุด 2 คน" 
+                       type="text" name="advisor" class="advisor-input" 
+                       required readonly onclick="openAdvisorModal(this)"> <br>
+            <input type="hidden" name="year" value="">`;
+        container.appendChild(div);
+    }
+}
+
+// Modal functions
+function openAdvisorModal(inputElem) {
+    currentAdvisorInput = inputElem;
+    currentChecked = inputElem.value ? inputElem.value.split(',').map(s=>s.trim()).filter(Boolean) : [];
+    let tbody = document.getElementById('advisor-table-body');
+    tbody.innerHTML = "";
+    advisors.forEach(name => {
+        let checked = currentChecked.includes(name) ? 'checked' : '';
+        tbody.innerHTML += `<tr>
+            <td style="width:1.2em"><input type="checkbox" value="${name}" onchange="onCheckAdvisor(this)" ${checked}></td>
+            <td>${name}</td>
+        </tr>`;
+    });
+    document.getElementById('advisor-modal').style.display = "block";
+}
+function closeAdvisorModal() {
+    document.getElementById('advisor-modal').style.display = "none";
+    currentAdvisorInput = null;
+    currentChecked = [];
+}
+function onCheckAdvisor(checkbox) {
+    let tbody = document.getElementById('advisor-table-body');
+    let checkedBoxes = tbody.querySelectorAll('input[type="checkbox"]:checked');
+    if (checkedBoxes.length > 2) { checkbox.checked = false; alert('เลือกชื่ออาจารย์ได้สูงสุด 2 คน'); }
+}
+function confirmAdvisorSelection() {
+    let tbody = document.getElementById('advisor-table-body');
+    let checked = tbody.querySelectorAll('input[type="checkbox"]:checked');
+    if (checked.length === 0) { alert("กรุณาเลือกอาจารย์อย่างน้อย 1 คน"); return; }
+    currentAdvisorInput.value = Array.from(checked).map(cb=>cb.value).join(', ');
+    closeAdvisorModal();
+}
+
+// ฟังก์ชัน validate และรวม metadata ก่อนส่ง
+document.getElementById("upload-form").onsubmit = function(e){
+    let meta_datas = [];
+    let valid = true;
+    let num_fields = document.querySelectorAll('#meta-container div').length;
+    for (let i=0; i<num_fields; i++) {
+        let inputs = document.querySelectorAll(`#meta-container div:nth-child(${i+1}) input`);
+        let meta = {title: inputs[0].value.trim(), author: inputs[1].value.trim(), advisor: inputs[2].value.trim()};
+        if (!meta.title || !meta.author || !meta.advisor) {
+            alert(`กรุณากรอก metadata ให้ครบทุกช่องของไฟล์ที่ ${i+1}`);
+            valid = false;
+            break;
+        }
+        meta_datas.push(meta);
+    }
+    if (!valid) { e.preventDefault(); return false; }
+    document.getElementById('meta_datas').value = JSON.stringify(meta_datas);
+};
+</script>
+</body>
+</html>
